@@ -12,6 +12,24 @@ public class Amigo {
     private String estado;
     private String cep;
 
+    Amigo(
+        String nomeCompleto, String genero, int idade, String email, String escolaridade, String endereco, int numero,
+        String complemento, String bairro, String cidade, String estado, String cep
+    ) {
+        this.nomeCompleto = nomeCompleto;
+        this.genero = genero;
+        this.idade = idade;
+        this.email = email;
+        this.escolaridade = escolaridade;
+        this.endereco = endereco;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+    }
+
     // Getters and Setters
     public String getNomeCompleto() {
         return nomeCompleto;
