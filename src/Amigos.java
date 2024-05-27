@@ -1,23 +1,18 @@
 import java.util.ArrayList;
 
 public class Amigos {
-    private int totalAmigos = -1;
+    private int atual = -1;
     private ArrayList<Amigo> listaDeAmigos;
 
     public Amigos() {
         this.listaDeAmigos = new ArrayList<>();
     }
 
-    public void adicionar(Amigo amigo) {
-        totalAmigos++;
-        try {
-            if (existeEmail(amigo.getEmail())) {
-                throw new RuntimeException("O e-mail " + amigo.getEmail() + " já está em uso.");
-            }
-            listaDeAmigos.add(amigo);
-        } catch (RuntimeException e) {
-            System.out.println("Erro ao adicionar amigo: " + e.getMessage());
+    public void adicionar(Amigo amigo) throws AmigoExisteException {
+        if (existeEmail(amigo.getEmail())) {
+            throw new AmigoExisteException(amigo);
         }
+        listaDeAmigos.add(amigo);
     }
 
     private boolean existeEmail(String email) {
@@ -34,6 +29,30 @@ public class Amigos {
     }
 
     public int getTotalAmigos() {
-        return totalAmigos;
+        return listaDeAmigos.size();
+    }
+
+    public Amigo primeiro() throws IndexOutOfBoundsException {
+        return listaDeAmigos.get(0);
+    }
+
+    public Amigo anterior() throws IndexOutOfBoundsException {
+        if (atual < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        atual--;
+        return listaDeAmigos.get(atual);
+    }
+
+    public Amigo proximo() throws IndexOutOfBoundsException {
+        if (atual > listaDeAmigos.size()) {
+            throw new IndexOutOfBoundsException();
+        }
+        atual++;
+        return listaDeAmigos.get(atual);
+    }
+
+    public Amigo ultimo() {
+        return listaDeAmigos.get(listaDeAmigos.size() - 1);
     }
 }
