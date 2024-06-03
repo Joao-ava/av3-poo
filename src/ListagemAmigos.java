@@ -7,26 +7,28 @@ public class ListagemAmigos extends JFrame {
 
     private Amigos amigos;
     private JPanel listaPanel;
+    private Armazenamento armazenamento;
 
     public ListagemAmigos() {
         setTitle("Listagem de Amigos");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        amigos = new Amigos();
-        carregarAmigos();
+        armazenamento = new Armazenamento();
+        amigos = armazenamento.carregar();
 
         listaPanel = new JPanel();
         listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.Y_AXIS));
 
         JScrollPane scrollPane = new JScrollPane(listaPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        CadastroAmigos cadastro = new CadastroAmigos(this);
 
         JButton btnAdicionarAmigo = new JButton("Adicionar Amigo");
         btnAdicionarAmigo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                adicionarAmigo();
+                cadastro.setVisible(true);
             }
         });
 
@@ -35,6 +37,12 @@ public class ListagemAmigos extends JFrame {
         atualizarLista();
 
         setVisible(true);
+    }
+
+    public void adicionarAmigo(Amigo amigo) throws AmigoExisteException {
+        amigos.adicionar(amigo);
+        armazenamento.salvar(amigos);
+        atualizarLista();
     }
 
     private void atualizarLista() {
@@ -50,7 +58,8 @@ public class ListagemAmigos extends JFrame {
             excluirButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // amigos.re(amigo);
+                    amigos.excluir(amigo);
+                    armazenamento.salvar(amigos);
                     atualizarLista();
                 }
             });
@@ -64,33 +73,27 @@ public class ListagemAmigos extends JFrame {
         listaPanel.repaint();
     }
 
-    private void adicionarAmigo() {
-        JTextField nomeField = new JTextField(10);
-        JTextField emailField = new JTextField(10);
-        JPanel panel = new JPanel(new GridLayout(0, 1));
-        panel.add(new JLabel("Nome:"));
-        panel.add(nomeField);
-        panel.add(new JLabel("E-mail:"));
-        panel.add(emailField);
+    // private void adicionarAmigo() {
+    //     JTextField nomeField = new JTextField(10);
+    //     JTextField emailField = new JTextField(10);
+    //     JPanel panel = new JPanel(new GridLayout(0, 1));
+    //     panel.add(new JLabel("Nome:"));
+    //     panel.add(nomeField);
+    //     panel.add(new JLabel("E-mail:"));
+    //     panel.add(emailField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Adicionar Amigo",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (result == JOptionPane.OK_OPTION) {
-            String nome = nomeField.getText();
-            String email = emailField.getText();
-            if (!nome.isEmpty() && !email.isEmpty()) {
-                // amigos.add(new Amigo(nome, email));
-                atualizarLista();
-            } else {
-                JOptionPane.showMessageDialog(this, "Nome e e-mail não podem estar vazios.", "Erro",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-    private void carregarAmigos() {
-        try {
-            amigos.adicionar(new Amigo("Jose", "masculino", 22, "jose@email.com", "Ensino superior completo", "Av logo ali", 101, "", "Bairro", "Cidade", "Estado", "CEP"));
-        } catch (AmigoExisteException err) {}
-    }
+    //     int result = JOptionPane.showConfirmDialog(null, panel, "Adicionar Amigo",
+    //             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+    //     if (result == JOptionPane.OK_OPTION) {
+    //         String nome = nomeField.getText();
+    //         String email = emailField.getText();
+    //         if (!nome.isEmpty() && !email.isEmpty()) {
+    //             // amigos.add(new Amigo(nome, email));
+    //             atualizarLista();
+    //         } else {
+    //             JOptionPane.showMessageDialog(this, "Nome e e-mail não podem estar vazios.", "Erro",
+    //                     JOptionPane.ERROR_MESSAGE);
+    //         }
+    //     }
+    // }
 }
