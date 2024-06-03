@@ -15,6 +15,10 @@ public class Amigos {
         listaDeAmigos.add(amigo);
     }
 
+    public void excluir(Amigo amigo) {
+        listaDeAmigos.remove(amigo);
+    }
+
     private boolean existeEmail(String email) {
         for (Amigo amigo : listaDeAmigos) {
             if (amigo.getEmail().equalsIgnoreCase(email)) {
